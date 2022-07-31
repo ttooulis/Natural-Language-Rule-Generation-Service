@@ -1,0 +1,1 @@
+curl --location --request POST localhost:8080/processnl --header "Content-Type: application/json" --data-raw "John is busy"

@@ -1,0 +1,13 @@
+[Unit]
+Description=NLRG Service
+
+[Service]
+User=nlrgadmin
+WorkingDirectory=/home/nlrgadmin/NLRGService/
+ExecStart=/home/nlrgadmin/NLRGService/NLRGService.sh
+
+StandardOutput=file:/home/nlrgadmin/NLRGService/Log-NLRGService.txt
+StandardError=file:/home/nlrgadmin/NLRGService/Log-NLRGService.txt
+
+[Install]
+WantedBy=multi-user.target
