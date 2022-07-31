@@ -1,0 +1,285 @@
+A000001_Version ::
+	metakbinfo(version) implies metakbinfo_data('Prudens SBS App v.1.0');
+
+
+
+C000010_Prep_Be_NER ::
+	cop(W1, P1, be, _),
+	case(W1, P1, Prep, _),
+	nsubj(W1, P1, W2, P2),
+	token(_, _, ner, _, W1, P1) implies
+	clause_prep_be_ner(W1, P1, W2, Prep);
+
+C000010_Prep_Be ::
+	cop(W1, P1, be, _),
+	case(W1, P1, Prep, _),
+	nsubj(W1, P1, W2, P2),
+	token(_, _, nner, _, W1, P1) implies
+	clause_prep_tobe(W1, P1, W2, Prep);
+
+C000020_Prep_NER ::
+	case(W1, P1, Prep, _),
+	nmod(W2, P2, W1, P1)
+	token(_, _, ner, _, W1, P1) implies
+	clause_prep_ner(W1, W2, P2, Prep);
+
+C000030_ToBe_NER ::
+	cop(W1, P1, be, _),
+	nsubj(W1, P1, W2, P2),
+	token(_, _, ner, _, W2, P2) implies
+	clause_tobe_ner(W1, P1, W2);
+
+C000035_ToBe_Compound ::
+	cop(W1, P1, be, _),
+	nsubj(W1, P1, W2, P2),
+	compound(W2, P2, W3, P3),
+	token(_, _, nner, o, W2, P2) implies
+	clause_tobe(W1, P1, W3);
+
+C000040_ToBe ::
+	cop(W1, P1, be, _),
+	nsubj(W1, P1, W2, P2),
+	token(_, _, nner, o, W2, P2) implies
+	clause_tobe(W1, P1, W2);
+
+C000050_ToBe_Verb_NER ::
+	aux(W1, P1, be, _),
+	nsubj(W1, P1, W2, P2),
+	token(_, _, ner, _, W2, P2) implies
+	clause_tobe_ner(W1, P1, W2);
+
+C000055_ToBe_Verb_Comp ::
+	aux(W1, P1, be, _),
+	nsubj(W1, P1, W2, P2),
+	compound(W2, P2, W3, P3),
+	token(_, _, nner, o, W2, P2) implies
+	clause_tobe(W1, P1, W3);
+
+C000060_ToBe_Verb ::
+	aux(W1, P1, be, _),
+	nsubj(W1, P1, W2, P2),
+	token(_, _, nner, o, W2, P2) implies
+	clause_tobe(W1, P1, W2);
+
+C000070_Verb_Subj_NER ::
+	token(_, TAG, _, _, W1, P1), ?in(TAG, [vbz, vbp]),
+	nsubj(W1, P1, W2, P2),
+	token(_, _, ner, _, W2, P2) implies
+	clause_verb_ner(W1, P1, W2);
+
+C000080_Verb ::
+	token(_, TAG, _, _, W1, P1), ?in(TAG, [vbz, vbp]),
+	nsubj(W1, P1, W2, P2),
+	token(_, _, nner, o, W2, P2) implies
+	clause_verb(W1, P1, W2);
+
+C000090_Impe_Obj_NER ::
+	token(_, TAG, _, _, W1, P1), ?in(TAG, [vb, vbz, vbp]),
+	dobj(W1, P1, W2, P2),
+	token(_, _, ner, _, W2, P2) implies
+	clause_impe_ner(W1, P1, W2);
+
+C000100_Impe ::
+	token(_, TAG, _, _, W1, P1), ?in(TAG, [vb, vbz, vbp]),
+	dobj(W1, P1, W2, P2),
+	token(_, TAG2, nner, o, W2, P2), ?in(TAG2, [nn, nns, nnp, nnps]) implies
+	clause_impe(W1, P1, W2);
+
+C000110_Impe_No_Obj ::
+	token(_, TAG, _, _, W1, P1), ?in(TAG, [vb, vbz, vbp]) implies
+	clause_impe_noobj(W1, P1, call);
+
+C000210_Impl_Subj ::
+	token(_, jj, nner, o, W1, P1) implies
+	clause_impl_subj(W1, P1, user);
+
+
+C010010_Simple_NER ::
+	clause_tobe_ner(W1, P1, W2) implies
+	clause_simple_ner(W1, P1, W2);
+
+C010020_Simple_NER ::
+	clause_verb_ner(W1, P1, W2) implies
+	clause_simple_ner(W1, P1, W2);
+
+C010030_Simple_NER ::
+	clause_impe_ner(W1, P1, W2) implies
+	clause_simple_ner(W1, P1, W2);
+
+C010040_Simple ::
+	clause_tobe(W1, P1, W2) implies
+	clause_simple(W1, P1, W2);
+
+C010050_Simple ::
+	clause_verb(W1, P1, W2) implies
+	clause_simple(W1, P1, W2);
+
+C010060_Simple ::
+	clause_impe(W1, P1, W2) implies
+	clause_simple(W1, P1, W2);
+
+C010060_Simple_Incompl ::
+	clause_impe_noobj(W1, P1, W2) implies
+	clause_simple_incompl(W1, P1, W2);
+
+C010210_Simple_Incompl ::
+	clause_impl_subj(W1, P1, W2) implies
+	clause_simple_incompl(W1, P1, W2);
+
+
+C020010_Cond ::
+	root(root, 0, IW0, IP0),
+	dep(IW0, IP0, _, _),
+	dep(_, _, W1, P1) implies
+	clause_cond(W1, P1);
+
+C020020_Cond ::
+	root(root, 0, W1, P1),
+	mark(W1, P1, if, _) implies
+	clause_cond(W1, P1);
+
+C020030_Cond ::
+	advmod(W1, P1, when, _),
+	dep(W1, P1, _, _) implies
+	clause_cond(W1, P1);
+
+C020040_Cond ::
+	advcl(_, _, W1, P1) implies
+	clause_cond(W1, P1);
+
+
+
+
+C030010_Conj ::
+	conj(W1, P1, W2, P2), clause_cond(W1, P1) implies
+	clause_conj(W2, P2);
+
+C030020_Conj ::
+	conj(W1, P1, W2, P2), clause_cond(W2, P2) implies
+	clause_conj(W1, P1);
+
+
+
+S000010_From_Be_NER ::
+	root(root, 0, W1, P1),
+	clause_prep_be_ner(W1, P1, W2, from) implies
+	ruleterms(head, 0, W2, from, args, W1);
+
+S000012_At_Be_NER ::
+	root(root, 0, W1, P1),
+	clause_prep_be_ner(W1, P1, W2, at) implies
+	ruleterms(head, 0, at, args, W1);
+
+S000014_At_Be ::
+	root(root, 0, W1, P1),
+	clause_prep_tobe(W1, P1, W2, at) implies
+	ruleterms(head, 0, at, args, W1);
+
+S000020_From_NER ::
+	root(root, 0, W2, P2),
+	clause_prep_ner(W1, W2, P2, from) implies
+	ruleterms(head, 0, W2, from, args, W1);
+
+S000022_At_NER ::
+	root(root, 0, W2, P2),
+	clause_prep_ner(W1, W2, P2, at) implies
+	ruleterms(head, 0, at, args, W2);
+
+S000030_Simple_NER ::
+	root(root, 0, W1, P1),
+	clause_simple_ner(W1, P1, W2) implies
+	ruleterms(head, 0, W1, args, W2);
+
+S000040_Simple ::
+	root(root, 0, W1, P1),
+	clause_simple(W1, P1, W2) implies
+	ruleterms(head, 0, W1, args, vph-1, next, W2, args, vph-1);
+
+S000040_Simple_Incompl ::
+	root(root, 0, W1, P1),
+	clause_simple_incompl(W1, P1, W2) implies
+	ruleterms(head, 0, W1, args, vph-1, next, W2, args, vph-1);
+
+
+
+S100010_From_Be_NER ::
+	clause_cond(W1, P1),
+	clause_prep_be_ner(W1, P1, W2, from) implies
+	ruleterms(body, 1, W2, from, args, W1);
+
+S100012_At_Be_NER ::
+	clause_cond(W1, P1),
+	clause_prep_be_ner(W1, P1, W2, at) implies
+	ruleterms(body, 1, at, args, W1);
+
+S100014_At_Be ::
+	clause_cond(W1, P1),
+	clause_prep_tobe(W1, P1, W2, at) implies
+	ruleterms(body, 1, at, args, W1);
+
+S100020_From_NER ::
+	clause_cond(W2, P2),
+	clause_prep_ner(W1, W2, P2, from) implies
+	ruleterms(body, 1, W2, from, args, W1);
+
+S100030_From_NER ::
+	clause_cond(W1, P1),
+	clause_prep_ner(W1, W2, P2, from) implies
+	ruleterms(body, 1, W2, from, args, W1);
+
+S100040_Simple_NER ::
+	clause_cond(W1, P1),
+	clause_simple_ner(W1, P1, W2) implies
+	ruleterms(body, 1, W1, from, args, W2);
+
+S100050_Simple ::
+	clause_cond(W1, P1),
+	clause_simple(W1, P1, W2) implies
+	ruleterms(body, 1, W1, from, args, vph-1, next, is, W2, args, vph-1);
+
+S100060_Simple_Incompl ::
+	clause_cond(W1, P1),
+	clause_simple_incompl(W1, P1, W2) implies
+	ruleterms(body, 1, W1, args, vph-1, next, is, W2, args, vph-1);
+
+
+
+S200010_From_Be_NER ::
+	clause_conj(W1, P1),
+	clause_prep_be_ner(W1, P1, W2, from) implies
+	ruleterms(body, 2, W2, from, args, W1);
+
+S200012_At_Be_NER ::
+	clause_conj(W1, P1),
+	clause_prep_be_ner(W1, P1, W2, at) implies
+	ruleterms(body, 2, at, args, W1);
+
+S200014_At_Be ::
+	clause_conj(W1, P1),
+	clause_prep_tobe(W1, P1, W2, at) implies
+	ruleterms(body, 2, at, args, W1);
+
+S200020_From_NER ::
+	clause_conj(W2, P2),
+	clause_prep_ner(W1, W2, P2, from) implies
+	ruleterms(body, 2, W2, from, args, W1);
+
+S200030_From_NER ::
+	clause_conj(W1, P1),
+	clause_prep_ner(W1, W2, P2, from) implies
+	ruleterms(body, 2, W2, from, args, W1);
+
+S200040_Simple_NER ::
+	clause_conj(W1, P1),
+	clause_simple_ner(W1, P1, W2) implies
+	ruleterms(body, 2, W1, from, args, W2);
+
+S200050_Simple ::
+	clause_conj(W1, P1),
+	clause_simple(W1, P1, W2) implies
+	ruleterms(body, 2, W1, from, args, vph-1, next, is, W2, args, vph-1);
+
+S200060_Simple_Incompl ::
+	clause_conj(W1, P1),
+	clause_simple_incompl(W1, P1, W2) implies
+	ruleterms(body, 2, W1, args, vph-1, next, is, W2, args, vph-1);

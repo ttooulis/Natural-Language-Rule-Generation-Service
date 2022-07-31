@@ -1,7 +1,7 @@
 <NLRG>
     <Annotators>tokenize, ssplit, pos, depparse, lemma, ner</Annotators>
     <NeckSymbol>implies</NeckSymbol>
-	<MetaKBFile>MetaLevel-Translation-KB.prudens</MetaKBFile>
+	<MetaKBFile>MetaLevel-Translation-KB-ForApp-v.2.0.prudens</MetaKBFile>
 	<PredicateNameConcatChar></PredicateNameConcatChar>
 	<PredicateNameCapitalize>1</PredicateNameCapitalize>
 </NLRG>

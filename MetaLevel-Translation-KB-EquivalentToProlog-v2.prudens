@@ -1,0 +1,198 @@
+A000001_Version ::
+	metakbinfo(version) implies metakbinfo_data('Prudens v2');
+
+
+
+C000010_ToBe_NER ::
+	cop(W1, P1, be, _),
+	nsubj(W1, P1, W2, P2),
+	token(_, _, ner, _, W2, P2) implies
+	sentence_clause_tobe_ner(W1, P1, W2);
+
+C000020_ToBe ::
+	cop(W1, P1, be, _),
+	nsubj(W1, P1, W2, P2),
+	token(_, _, nner, o, W2, P2) implies
+	sentence_clause_tobe_nner(W1, P1, W2);
+
+C000030_ToBeVerb_NER ::
+	aux(W1, P1, be, _),
+	nsubj(W1, P1, W2, P2),
+	token(_, _, ner, _, W2, P2) implies
+	sentence_clause_tobe_ner(W1, P1, W2);
+
+C000040_ToBeVerb ::
+	aux(W1, P1, be, _),
+	nsubj(W1, P1, W2, P2),
+	token(_, _, nner, o, W2, P2) implies
+	sentence_clause_tobe_nner(W1, P1, W2);
+
+C000050_TranVerb_BothNER ::
+	token(_, TAG, _, _, W1, P1), ?in(TAG, [vbz, vbp, vb]),
+	nsubj(W1, P1, W2, P2),
+	token(_, _, ner, _, W2, P2),
+	dobj(W1, P1, W3, P3),
+	token(_, _, ner, _, W3, P3) implies
+	sentence_clause_tranverb_bothner(W1, P1, W2, W3);
+
+C000060_TranVerb_ObjNER ::
+	token(_, TAG, _, _, W1, P1), ?in(TAG, [vbz, vbp, vb]),
+	nsubj(W1, P1, W2, P2),
+	token(_, _, nner, o, W2, P2),
+	dobj(W1, P1, W3, P3),
+	token(_, _, ner, _, W3, P3) implies
+	sentence_clause_tranverb_objner(W1, P1, W2, W3);
+
+C000070_TranVerb_SubjNER ::
+	token(_, TAG, _, _, W1, P1), ?in(TAG, [vbz, vbp, vb]),
+	nsubj(W1, P1, W2, P2),
+	token(_, _, ner, _, W2, P2),
+	dobj(W1, P1, W3, P3),
+	token(_, _, nner, o, W3, P3) implies
+	sentence_clause_tranverb_subjner(W1, P1, W2, W3);
+
+C000080_TranVerb ::
+	token(_, TAG, _, _, W1, P1), ?in(TAG, [vbz, vbp, vb]),
+	nsubj(W1, P1, W2, P2),
+	token(_, _, nner, o, W2, P2),
+	dobj(W1, P1, W3, P3),
+	token(_, _, nner, o, W3, P3) implies
+	sentence_clause_tranverb(W1, P1, W2, W3);
+
+C000090_VbImpObj_SubjNER ::
+	token(_, TAG, _, _, W1, P1), ?in(TAG, [vbz, vbp]),
+	nsubj(W1, P1, W2, P2),
+	token(_, _, ner, _, W2, P2) implies
+	sentence_clause_verbimplobj_subjner(W1, P1, W2);
+
+C000100_VbImpObj ::
+	token(_, TAG, _, _, W1, P1), ?in(TAG, [vbz, vbp]),
+	nsubj(W1, P1, W2, P2),
+	token(_, _, nner, o, W2, P2) implies
+	sentence_clause_verbimplobj(W1, P1, W2);
+
+C000110_Impe_ObjNER ::
+	token(_, TAG, _, _, W1, P1), ?in(TAG, [vb, vbz, vbp]),
+	dobj(W1, P1, W2, P2),
+	token(_, _, ner, _, W2, P2) implies
+	sentence_clause_impe_objner(W1, P1, W2);
+
+C000120_Impe_Obj ::
+	token(_, TAG, _, _, W1, P1), ?in(TAG, [vb, vbz, vbp]),
+	dobj(W1, P1, W2, P2),
+	token(_, _, nner, o, W2, P2) implies
+	sentence_clause_impe_obj(W1, P1, W2);
+
+C000210_Impl_Subj ::
+	token(_, jj, nner, o, W1, P1) implies
+	sentence_clause_impl_subj(W1, P1);
+
+
+
+
+S110010_ToBe_NER ::
+	root(root, 0, W1, P1),
+	sentence_clause_tobe_ner(W1, P1, W2) implies
+	ruleterms(head, 0, W1, args, W2);
+
+S110020_ToBe_NNER ::
+	root(root, 0, W1, P1),
+	sentence_clause_tobe_nner(W1, P1, W2) implies
+	ruleterms(head, 0, W1, args, vph-1, next, W2, args, vph-1);
+
+S120010_TranVerb_BothNER ::
+	root(root, 0, W1, P1),
+	sentence_clause_tranverb_bothner(W1, P1, W2, W3) implies
+	ruleterms(head, 0, W1, args, W2, W3);
+
+S120020_TranVerb_ObjNER ::
+	root(root, 0, W1, P1),
+	sentence_clause_tranverb_objner(W1, P1, W2, W3) implies
+	ruleterms(head, 0, W1, args, vph-1, W3, next, W2, args, vph-1);
+
+S120030_TranVerb_SubjNER ::
+	root(root, 0, W1, P1),
+	sentence_clause_tranverb_subjner(W1, P1, W2, W3) implies
+	ruleterms(head, 0, W1, args, W2, vph-1, next, W3, args, vph-1);
+
+S120040_TranVerb ::
+	root(root, 0, W1, P1),
+	sentence_clause_tranverb(W1, P1, W2, W3) implies
+	ruleterms(head, 0, W1, args, vph-1, vph-2, next, W2, args, vph-1, next, W3, args, vph-2);
+
+S130010_VrbImpObj_SubNER ::
+	root(root, 0, W1, P1),
+	sentence_clause_verbimplobj_subjner(W1, P1, W2) implies
+	ruleterms(head, 0, W1, args, W2);
+
+S130020_VrbImpObj ::
+	root(root, 0, W1, P1),
+	sentence_clause_verbimplobj(W1, P1, W2) implies
+	ruleterms(head, 0, W1, args, vph-1, next, W2, args, vph-1);
+	
+S140010_ImpObjNER ::
+	root(root, 0, W1, P1),
+	sentence_clause_impe_objner(W1, P1, W2) implies
+	ruleterms(head, 0, W1, args, W2);
+
+S140020_ImpObj ::
+	root(root, 0, W1, P1),
+	sentence_clause_impe_obj(W1, P1, W2) implies
+	ruleterms(head, 0, W1, args, vph-1, next, W2, args, vph-1);
+
+
+
+S210010_ToBe_NER ::
+	advcl(_, _, W1, P1),
+	sentence_clause_tobe_ner(W1, P1, W2) implies
+	ruleterms(body, 1, W1, args, W2);
+
+S210020_ToBe_NNER ::
+	advcl(_, _, W1, P1),
+	sentence_clause_tobe_nner(W1, P1, W2) implies
+	ruleterms(body, 1, W1, args, vph-1, next, W2, args, vph-1);
+
+S220010_TranVerb_BothNER ::
+	advcl(_, _, W1, P1),
+	sentence_clause_tranverb_bothner(W1, P1, W2, W3) implies
+	ruleterms(body, 1, W1, args, W2, W3);
+
+S220020_TranVerb_ObjNER ::
+	advcl(_, _, W1, P1),
+	sentence_clause_tranverb_objner(W1, P1, W2, W3) implies
+	ruleterms(body, 1, W1, args, vph-1, W3, next, W2, args, vph-1);
+
+S220030_TranVerb_SubjNER ::
+	advcl(_, _, W1, P1),
+	sentence_clause_tranverb_subjner(W1, P1, W2, W3) implies
+	ruleterms(body, 1, W1, args, W2, vph-1, next, W3, args, vph-1);
+
+S220040_TranVerb ::
+	advcl(_, _, W1, P1),
+	sentence_clause_tranverb(W1, P1, W2, W3) implies
+	ruleterms(body, 1, W1, args, vph-1, vph-2, next, W2, args, vph-1, next, W3, args,vph-2);
+
+S230010_VrbImpObj_SubNER ::
+	advcl(_, _, W1, P1),
+	sentence_clause_verbimplobj_subjner(W1, P1, W2) implies
+	ruleterms(body, 1, W1, args, W2);
+
+S230020_VrbImpObj ::
+	advcl(_, _, W1, P1),
+	sentence_clause_verbimplobj(W1, P1, W2) implies
+	ruleterms(body, 1, W1, args, vph-1, next, W2, args, vph-1);
+	
+S240010_ImpObjNER ::
+	advcl(_, _, W1, P1),
+	sentence_clause_impe_objner(W1, P1, W2) implies
+	ruleterms(body, 1, W1, args, W2);
+
+S240020_ImpObj ::
+	advcl(_, _, W1, P1),
+	sentence_clause_impe_obj(W1, P1, W2) implies
+	ruleterms(body, 1, W1, args, vph-1, next, W2, args, vph-1);						
+
+S250010_ImplSubj ::
+	advcl(_, _, W1, P1),
+	sentence_clause_impl_subj(W1, P1) implies
+	ruleterms(body, 1, W1);
