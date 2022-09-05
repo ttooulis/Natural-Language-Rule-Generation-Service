@@ -9,4 +9,4 @@ set JAVA_HOME=C:\Program Files\Java\jdk-17.0.2
 
 @rem mvnw install:install-file -Dfile="C:\git\repository\NESTOR Project Workspace\lib\prudensApp.jar" -DgroupId=coaching -DartifactId=prudensApp -Dversion=1.0 -Dpackaging=jar -DgeneratePom=true
 
-mvnw install:install-file -Dfile="C:\git\repository\NESTOR Project Workspace\lib\NLRGLib.jar" -DgroupId=cy.ac.ouc.cognition.nlrg.lib -DartifactId=nlrglib -Dversion=1.0 -Dpackaging=jar -DgeneratePom=true
+mvnw install:install-file -Dfile="C:\git\repository\NESTOR Project Workspace - Prudens\lib\NLRGLib.jar" -DgroupId=cy.ac.ouc.cognition.nlrg.lib -DartifactId=nlrglib -Dversion=1.0 -Dpackaging=jar -DgeneratePom=true
