@@ -140,14 +140,14 @@ public class NLRGServiceController {
 	}
 
 
-	@Operation(summary  =	"Control NESTOR Service. " +
-							" 0: Initialize Service, " +
-							" 1: Load Meta-Level KB, " +
-							" 2: Get Meta-Level KB Version, " +
-							" 3: Get Meta-Level KB Text, " +
-							" 4: Get NESTOR Service Title, " +
-							" 5: Get NESTOR Service Server Name, " +
-							" 6: Get NESTOR Service Port, " +
+	@Operation(summary  =	"Control NESTOR Service. \n" +
+							" 0: Initialize Service, \n" +
+							" 1: Load Meta-Level KB, \n" +
+							" 2: Get Meta-Level KB Version, \n" +
+							" 3: Get Meta-Level KB Text, \n" +
+							" 4: Get NESTOR Service Title, \n" +
+							" 5: Get NESTOR Service Server Name, \n" +
+							" 6: Get NESTOR Service Port, \n" +
 							" 7: Get Miscalleneous Information")
     @RequestMapping(value = "/control", method = RequestMethod.GET, produces = "application/json")
 	public ReturnMessage controlService(HttpServletRequest request, @RequestParam("command") Integer command) {
@@ -251,15 +251,15 @@ public class NLRGServiceController {
 
     @Operation(summary = "Generate Context from Natural Language Text")
     @RequestMapping(value = "/generatecontext", method = RequestMethod.POST, produces = "application/json")
-	public ReturnMessage generateQueries(@RequestBody String nlText) {
+	public ReturnMessage generateContext(@RequestBody String nlText) {
 		try {
 			System.out.println("Will try to generate context from NL text: [" + nlText + "]");
 			NLRGPipe.processNL(nlText);
 			NLRGPipe.generateMetaPredicates();
-			NLRGPipe.buildMetaQueries();
+			NLRGPipe.buildSentencesContext();
 
 			System.out.println("Context generated from NL Text!");
-			return new ReturnMessage(0, "Context", NLRGPipe.getMetaQueryTextData());
+			return new ReturnMessage(0, "Context", NLRGPipe.getSentencesContextTextData());
 
 		} catch (Exception nlpe) {
 			System.out.println("Failed to generate context!");
@@ -278,8 +278,8 @@ public class NLRGServiceController {
 			System.out.println("Will try to generate rules from NL text: [" + nlText + "]");
 			NLRGPipe.processNL(nlText);
 			NLRGPipe.generateMetaPredicates();
-			NLRGPipe.buildMetaQueries();
-			NLRGPipe.runMetaQueries(null);
+			NLRGPipe.buildSentencesContext();
+			NLRGPipe.extractRules(null);
 
 			System.out.println("Rules generated from NL Text!");
 			return new ReturnMessage(0, "Rules generated from Natural Language Text", NLRGPipe.buildExtractedRules());
@@ -305,8 +305,8 @@ public class NLRGServiceController {
 			System.out.println("Will try to generate rules from NL text: [" + nlText + "] using Meta-Level Translation KB: [" + metaKB + "]");
 			NLRGPipe.processNL(nlText);
 			NLRGPipe.generateMetaPredicates();
-			NLRGPipe.buildMetaQueries();
-			NLRGPipe.runMetaQueries(metaKB);
+			NLRGPipe.buildSentencesContext();
+			NLRGPipe.extractRules(metaKB);
 
 			System.out.println("Rules generated from NL Text and custom Meta-Level Translation KB!");
 			String message = "Rules generated from Natural Language Text";
