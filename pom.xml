@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>cy.ac.ouc.cognition.nlrg.service</groupId>
 	<artifactId>NLRGService</artifactId>
-	<version>1.0.1</version>
+	<version>1.2.0</version>
 	<name>NLRGService</name>
 	<description>NLRG Service</description>
 	<properties>

@@ -18,7 +18,7 @@ import cy.ac.ouc.cognition.nlrg.lib.*;
 
 @CrossOrigin
 @RestController
-@Tag(name="NESTOR Service", description="Knowledge-Based Translation of Natural Language into Symbolic Form")
+@Tag(name="NESTOR Service", description="Knowledge-Based Natural Language to Symbolic Form Translator")
 public class NLRGServiceController {
 
 	private boolean init;
@@ -30,7 +30,7 @@ public class NLRGServiceController {
 	private static NLRGPipeline	NLRGPipe;
 	private static String 		MetaKBVersion = "MKB Not Loaded";
 	private static String		MetaKBText = "";
-	private static String		ServiceTitle = "NESTOR - Knowledge-Based Translation of Natural Language into Symbolic Form";
+	private static String		ServiceTitle = "NESTOR - Knowledge-Based Natural Language to Symbolic Form Translator";
 	private static int			InstanceId = 0;
 	private int					ObjectCounter = 0;
 	private int					InfoCounter;
@@ -45,7 +45,7 @@ public class NLRGServiceController {
 			InfoCounter = 0;
 		}
 		catch (NLRGException nlrge) {
-			System.out.println("NESTOR Service failed to initialize NESTOR Pipeline Object!: " + nlrge.getMessage());
+			System.out.println("NESTOR Service failed to initialize NLRG Pipeline Object!: " + nlrge.getMessage());
 			nlrge.printStackTrace();			
 		}
 
@@ -68,25 +68,25 @@ public class NLRGServiceController {
 
 				MetaKBText = NLRGPipe.getMetaKnowledgeBaseText();
 
-				System.out.println("Meta-Level Translation Knowledge Base first line:");
+				System.out.println("Translation Policy Knowledge first line:");
 				Integer eolIndex = MetaKBText.indexOf("\n");
 				if (eolIndex > -1)
 					System.out.println(MetaKBText.substring(0, eolIndex));
 				else
 					System.out.println(MetaKBText);
 
-				System.out.println("Meta-Level Translation Base Loaded, Version=[" + MetaKBVersion + "]!");
+				System.out.println("Translation Policy Loaded, Version=[" + MetaKBVersion + "]!");
 
 				return 0;
 			}
 
 			else {
-				System.out.println("Meta-Level Translation Knowledge Base Failed to Load!");
+				System.out.println("Translation Policy Failed to Load!");
 				return 1;
 			}
 
 		} catch (Exception | OutOfMemoryError nlpe) {
-			System.out.println("Meta-Level Translation Knowledge Base failed to Load!");
+			System.out.println("Translation Policy failed to Load!");
 			nlpe.printStackTrace();
 
 			return 2;
@@ -102,13 +102,13 @@ public class NLRGServiceController {
 			int loadResult = loadMetaKB();
 			
 			if (loadResult == 0)
-				return new ReturnMessage(0, "NESTOR Initialized", "Meta-Level Translation KB Version=[" + MetaKBVersion + "]!");
+				return new ReturnMessage(0, "NESTOR Initialized", "Translation Policy Version=[" + MetaKBVersion + "]!");
 
 			else if (loadResult == 1)
-				return new ReturnMessage(1101, "NESTOR Failed to Initialize", "Meta-Level Translation Knowledge Base loading error");
+				return new ReturnMessage(1101, "NESTOR Failed to Initialize", "Translation Policy loading error");
 			
 			else
-				return new ReturnMessage(1111, "NESTOR Failed to Initialize", "Meta-Level Translation Knowledge Base loading error. Uncaught exception");
+				return new ReturnMessage(1111, "NESTOR Failed to Initialize", "Translation Policy loading error. Uncaught exception");
 
 		} catch (Exception | OutOfMemoryError nlpe) {
 			System.out.println("NESTOR Service failed to initialize!");
@@ -134,7 +134,7 @@ public class NLRGServiceController {
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = "text/html")
 	public String index(HttpServletRequest request) {
 
-		return	"<H1>" + ServiceTitle + "</H1><H2>REST Service</H2><H3>Meta-Level Translation KB Version: " + MetaKBVersion + "</H3>" +
+		return	"<H1>" + ServiceTitle + "</H1><H2>REST Service</H2><H3>Translation Policy Version: " + MetaKBVersion + "</H3>" +
 				"[" + request.getLocalName() + "][" + request.getLocalPort()+ "][" + InstanceId + "][" + ObjectCounter + "][" + InfoCounter + "]";
 
 	}
@@ -142,9 +142,9 @@ public class NLRGServiceController {
 
 	@Operation(summary  =	"Control NESTOR Service. \n" +
 							" 0: Initialize Service, \n" +
-							" 1: Load Meta-Level KB, \n" +
-							" 2: Get Meta-Level KB Version, \n" +
-							" 3: Get Meta-Level KB Text, \n" +
+							" 1: Load Translation Policy, \n" +
+							" 2: Get Translation Policy Version, \n" +
+							" 3: Get Translation Policy Text, \n" +
 							" 4: Get NESTOR Service Title, \n" +
 							" 5: Get NESTOR Service Server Name, \n" +
 							" 6: Get NESTOR Service Port, \n" +
@@ -162,20 +162,20 @@ public class NLRGServiceController {
 			int loadResult = loadMetaKB();
 				
 			if (loadResult == 0)
-				return new ReturnMessage(0, "Meta-Level Translation Knowledge Base Loaded", "Version=["+MetaKBVersion+"]");
+				return new ReturnMessage(0, "Translation Policy Loaded", "Version=["+MetaKBVersion+"]");
 
 			else
-				return new ReturnMessage(1201, "Meta-Level Translation Knowledge Base Failed to Load", "Meta-Level Translation Knowledge Base loading error");
+				return new ReturnMessage(1201, "Translation Policy Failed to Load", "Translation Policy loading error");
 		}
 
 		else if (command == CommandType.GETMETAKBVERSION.ordinal()) {
 
-			return new ReturnMessage(0, "Meta-Level Translation Knowledge Base Version", MetaKBVersion);
+			return new ReturnMessage(0, "Translation Policy Version", MetaKBVersion);
 		}
 
 		else if (command == CommandType.GETMETAKBTEXT.ordinal()) {
 
-			return new ReturnMessage(0, "Meta-Level Translation Text", MetaKBText);
+			return new ReturnMessage(0, "Translation Policy Text", MetaKBText);
 		}
 		
 		else if (command == CommandType.GETTITLE.ordinal()) {
@@ -228,23 +228,23 @@ public class NLRGServiceController {
 	}
 
 
-    @Operation(summary = "Generate Meta-Predicates from Natural Language Text")
+    @Operation(summary = "Generate Policy Predicates from Natural Language Text")
     @RequestMapping(value = "/generatemetapredicates", method = RequestMethod.POST, produces = "application/json")
 	public ReturnMessage generateMetaPredicates(@RequestBody String nlText) {
 		try {
-			System.out.println("Will try to generate Meta-Predicates from NL text: [" + nlText + "]");
+			System.out.println("Will try to generate Policy Predicates from NL text: [" + nlText + "]");
 			NLRGPipe.processNL(nlText);
 			NLRGPipe.generateMetaPredicates();
 
 			System.out.println("Meta-Predicates generated from NL Text!");
-			return new ReturnMessage(0, "Meta-Predicate Data", NLRGPipe.getMetaPredicateTextData());
+			return new ReturnMessage(0, "Policy Predicate Data", NLRGPipe.getMetaPredicateTextData());
 
 		} catch (Exception nlpe) {
-			System.out.println("Failed to generate Meta-Predicates!");
+			System.out.println("Failed to generate Policy Predicates!");
 			System.out.println(nlpe.getMessage());
 			nlpe.printStackTrace();
 
-			return new ReturnMessage(1401, "Failed to generate Meta-Predicates", nlpe.getMessage());
+			return new ReturnMessage(1401, "Failed to generate Policy Predicates", nlpe.getMessage());
 		}
 	}
 
@@ -294,7 +294,7 @@ public class NLRGServiceController {
 	}
 
 
-    @Operation(summary = "Generate Rules from Natural Language Text using custom Meta-Level Translation Knowledge Base")
+    @Operation(summary = "Generate Rules from Natural Language Text using custom Translation Policy")
     @RequestMapping(value = "/generaterules-customkb", method = RequestMethod.POST, produces = "application/json")
 	public ReturnMessage generateRulesPrivate(@RequestBody AdviceData adviceData) {
 		String metaKB = "";
@@ -302,27 +302,66 @@ public class NLRGServiceController {
 			String nlText = adviceData.getNLText();
 			metaKB = adviceData.getMetaKB();
 
-			System.out.println("Will try to generate rules from NL text: [" + nlText + "] using Meta-Level Translation KB: [" + metaKB + "]");
+			System.out.println("Will try to generate rules from NL text: [" + nlText + "] using Translation Policy: [" + metaKB + "]");
 			NLRGPipe.processNL(nlText);
 			NLRGPipe.generateMetaPredicates();
 			NLRGPipe.buildSentencesContext();
 			NLRGPipe.extractRules(metaKB);
 
-			System.out.println("Rules generated from NL Text and custom Meta-Level Translation KB!");
+			System.out.println("Rules generated from NL Text and custom Translation Policy!");
 			String message = "Rules generated from Natural Language Text";
 			if (metaKB != "")
-				message += " and custom Meta-Level Translation KB";
+				message += " and custom Translation Policy";
 			return new ReturnMessage(0, message, NLRGPipe.buildExtractedRules());
 
 		} catch (Exception | OutOfMemoryError nlpe) {
-			System.out.println("Failed to generate rules from NL Text and custom Meta-KB!");
+			System.out.println("Failed to generate rules from NL Text and custom Translation Policy!");
 			System.out.println(nlpe.getMessage());
 			nlpe.printStackTrace();
 
 			String message = "Failed to generate rules from Natural Language Text";
 			if (metaKB != "")
-				message += " and custom Meta-Level Translation KB";
+				message += " and custom Translation Policy";
 			return new ReturnMessage(1601, message, nlpe.getMessage());
+		}
+	}
+
+
+    @Operation(summary = "Generate Rules from Natural Language Text using custom Translation Policy and return Explanation")
+    @RequestMapping(value = "/generaterules-customkb-expl", method = RequestMethod.POST, produces = "application/json")
+	public ReturnMessageExpl generateRulesPrivateWithExpl(@RequestBody AdviceData adviceData) {
+		String metaKB = "";
+		try {
+			String nlText = adviceData.getNLText();
+			metaKB = adviceData.getMetaKB();
+
+			System.out.println("Will try to generate rules from NL text: [" + nlText + "] using Translation Policy: [" + metaKB + "]");
+			NLRGPipe.processNL(nlText);
+			NLRGPipe.generateMetaPredicates();
+			NLRGPipe.buildSentencesContext();
+			NLRGPipe.extractRules(metaKB);
+
+			System.out.println("Rules generated from NL Text and custom Translation Policy!");
+			String message = "Rules generated from Natural Language Text";
+			if (metaKB != "")
+				message += " and custom Translation Policy";
+			
+			String markedRules = NLRGPipe.getMarkedRulesText();
+			String markedRulesChain = NLRGPipe.getMarkedRulesChainText();
+			if (markedRulesChain.isBlank())
+				markedRulesChain = markedRules;
+			
+			return new ReturnMessageExpl(0, message, NLRGPipe.buildExtractedRules(), markedRules, markedRulesChain);
+
+		} catch (Exception | OutOfMemoryError nlpe) {
+			System.out.println("Failed to generate rules from NL Text and custom Translation Policy!");
+			System.out.println(nlpe.getMessage());
+			nlpe.printStackTrace();
+
+			String message = "Failed to generate rules from Natural Language Text";
+			if (metaKB != "")
+				message += " and custom Translation Policy";
+			return new ReturnMessageExpl(1601, message, nlpe.getMessage(), "", "");
 		}
 	}
 
@@ -330,7 +369,7 @@ public class NLRGServiceController {
 
 
 
-@Schema(title = "AdviceData", description = "Advice data that include Natural Language Text and Meta-Level Translation Knowledge Base")
+@Schema(title = "AdviceData", description = "Advice data that include Natural Language Text and Translation Policy")
 class AdviceData {
 
 	private String		NLText = null;
@@ -368,7 +407,7 @@ class AdviceData {
 		return this;
 	}
 
-    @Schema(title = "metaKB", description = "Custom Meta-level Translation Knowledge Base")
+    @Schema(title = "metaKB", description = "Custom Translation Policy")
 	public String getMetaKB() {
 		return this.MetaKB;
 	}
@@ -492,9 +531,8 @@ class ReturnMessage {
 
 		return sb.toString();
 	}
-
 	
-	
+		
 	/**
 	 * Convert the given object to string with each line indented by 4 spaces
 	 * (except the first line).
@@ -511,3 +549,140 @@ class ReturnMessage {
 
 }
 
+
+
+
+@Schema(title = "ReturnMessageWithExplanation", description = "Return Message Object with Explanation")
+class ReturnMessageExpl {
+
+	private int		ResultCode = -1;
+	private String	Message = null;
+	private String	TextData = null;
+	private String	MarkedRules = null;
+	private String	MarkedRulesChain = null;
+
+	
+	
+	public ReturnMessageExpl(int ResultCode, String Message, String TextData, String MarkedRules, String MarkedRulesChain) {
+
+		this.ResultCode = ResultCode;
+		this.Message = Message;
+		this.TextData = TextData;
+		this.MarkedRules = MarkedRules;
+		this.MarkedRulesChain = MarkedRulesChain;
+	}
+
+
+	
+	public ReturnMessageExpl ResultCode(int ResultCode) {
+		this.ResultCode = ResultCode;
+		return this;
+	}
+
+	@Schema(title="ResultCode", required = true, description = "Service internal result code")
+	@NotNull
+	public int getResultCode() {
+		return ResultCode;
+	}
+
+	public void setResultCode(int ResultCode) {
+		this.ResultCode = ResultCode;
+	}
+	
+
+
+	public ReturnMessageExpl Message(String Message) {
+		this.Message = Message;
+		return this;
+	}
+
+	@Schema(title="Message", description = "Service result related message")
+	public String getMessage() {
+		return Message;
+	}
+
+	public void setMessage(String Message) {
+		this.Message = Message;
+	}
+
+
+
+	public ReturnMessageExpl TextData(String TextData) {
+		this.TextData = TextData;
+		return this;
+	}
+
+	@Schema(title="TextData", description = "Result text data")
+	public String getTextData() {
+		return this.TextData;
+	}
+
+	public void setTextData(String TextData) {
+		this.TextData = TextData;
+	}
+
+
+
+	public ReturnMessageExpl MarkedRules(String MarkedRules) {
+		this.MarkedRules = MarkedRules;
+		return this;
+	}
+
+	@Schema(title="MarkedRules", description = "Marked Rules text data")
+	public String getMarkedRules() {
+		return this.MarkedRules;
+	}
+
+	public void setMarkedRules(String MarkedRules) {
+		this.MarkedRules = MarkedRules;
+	}
+
+
+
+	public ReturnMessageExpl MarkedRulesChain(String MarkedRulesChain) {
+		this.MarkedRulesChain = MarkedRulesChain;
+		return this;
+	}
+
+	@Schema(title="MarkedRulesChain", description = "Marked Rules Chain text data")
+	public String getMarkedRulesChain() {
+		return this.MarkedRulesChain;
+	}
+
+	public void setMarkedRulesChain(String MarkedRulesChain) {
+		this.MarkedRulesChain = MarkedRulesChain;
+	}
+
+
+
+	@Override
+	public String toString() {
+
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("Return Message {\n");    
+		sb.append("    ResultCode: ").append(toIndentedString(Integer.valueOf(ResultCode))).append("\n");
+		sb.append("    Message: ").append(toIndentedString(Message)).append("\n");
+		sb.append("    TextData: ").append(toIndentedString(TextData)).append("\n");
+		sb.append("    MarkedRules: ").append(toIndentedString(MarkedRules)).append("\n");
+		sb.append("    MarkedRulesChain: ").append(toIndentedString(MarkedRulesChain)).append("\n");
+		sb.append("}");
+
+		return sb.toString();
+	}
+	
+	
+	/**
+	 * Convert the given object to string with each line indented by 4 spaces
+	 * (except the first line).
+	 */
+	private String toIndentedString(java.lang.Object o) {
+
+		if (o == null) {
+			return "null";
+		}
+
+		return o.toString().replace("\n", "\n    ");
+
+	}
+}
